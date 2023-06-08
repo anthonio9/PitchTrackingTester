@@ -1,0 +1,11 @@
+= PitchTracker Test Tool
+
+This is a test tool for pitch tracking librarier.
+
+== How to run?
+
+[source, python]
+----
+pip install -r requirements.txt
+python3 test_penn.py
+----
