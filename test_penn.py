@@ -19,17 +19,18 @@ batch_size = 2048
 
 # Select a checkpoint to use for inference. The default checkpoint will
 # download and use FCNF0++ pretrained on MDB-stem-synth and PTDB
-checkpoint = penn.DEFAULT_CHECKPOINT
+checkpoint = None
 
 # Centers frames at hopsize / 2, 3 * hopsize / 2, 5 * hopsize / 2, ...
-pad = True
+center = 'half-hop'
 
 # (Optional) Linearly interpolate unvoiced regions below periodicity threshold
 interp_unvoiced_at = .065
 
 # SOURCE AUDIO
 # audio = penn.load.audio('../../Data/test/assets/gershwin.wav')
-audio_path = '../../Data/audio_hex-pickup_original/02_Rock1-90-C#_solo_hex.wav'
+# audio_path = '../Datasets/GuitarSet/audio_hex-pickup_original/02_Rock1-90-C#_solo_hex.wav'
+audio_path = '../Datasets/GuitarSet/audio_mono-mic/02_Rock1-90-C#_solo_mic.wav'
 # Load audio at the correct sample rate
 audio = penn.load.audio(audio_path)
 num_channels, num_frames = audio.shape
@@ -37,7 +38,7 @@ num_channels, num_frames = audio.shape
 # MONOPHONIC
 if num_channels == 1:
     # reshape to torch.Size([1, x])
-    audio = audio.unsqueeze(0)
+    # audio = audio.unsqueeze(0)
     pitch, periodicity = penn.from_audio(
         audio,
         penn.SAMPLE_RATE,
@@ -46,7 +47,7 @@ if num_channels == 1:
         fmax=fmax,
         checkpoint=checkpoint,
         batch_size=batch_size,
-        pad=pad,
+        center=center,
         interp_unvoiced_at=interp_unvoiced_at,
         gpu=gpu)
 
@@ -67,7 +68,7 @@ if num_channels == 6:
             fmax=fmax,
             checkpoint=checkpoint,
             batch_size=batch_size,
-            pad=pad,
+            center=center,
             interp_unvoiced_at=interp_unvoiced_at,
             gpu=gpu)
 
